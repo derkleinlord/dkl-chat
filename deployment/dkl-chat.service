@@ -1,0 +1,22 @@
+[Unit]
+Description=DKL Chat FastAPI Backend
+After=network.target mariadb.service
+Requires=mariadb.service
+
+[Service]
+Type=simple
+User=dkl-chat
+Group=dkl-chat
+WorkingDirectory=/var/www/dkl-chat/backend
+EnvironmentFile=/etc/dkl-chat/dkl-chat.env
+ExecStart=/var/www/dkl-chat/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --proxy-headers --forwarded-allow-ips=127.0.0.1
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/dkl-chat/backend/uploads
+
+[Install]
+WantedBy=multi-user.target
